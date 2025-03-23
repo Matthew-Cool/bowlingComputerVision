@@ -1,18 +1,22 @@
 import cv2
-from matplotlib import pyplot as plt
-import time
+import numpy as np
 
+frameWidth = 1280
+frameHeight = 720
+camBrightness = 150
 
 cap = cv2.VideoCapture(0)
-ret, frame = cap.read()
+cap.set(3, frameWidth)
+cap.set(4, frameHeight)
+cap.set(10, camBrightness)
 
-print(ret)
+while True:
+    _, img = cap.read()
+    cv2.imshow('Original', img)
 
-if ret:
-    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    
-    plt.imshow(rgb_frame)
-    plt.pause(5)
-    plt.close()
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
 
 cap.release()
+cv2.destroyAllWindows()
