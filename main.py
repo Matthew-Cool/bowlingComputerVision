@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import tkinter as tk
-from tkinter import Toplevel
+import time
 
 import score
 
@@ -11,14 +11,22 @@ import score
 root = tk.Tk()
 
 numOfPlayers = 2 #make it an user input value in the future
+
 currentPlayer = 0
 currentFrame = 0
+currentThrow = 0
 
 system = score.Score(root, numOfPlayers) #open bowling scoreboard and keep track/edit through system var
 
-
-
 tk.mainloop()
+
+
+def updateScore(pins):
+    global currentPlayer, currentFrame, system
+    player = system.players[str(currentPlayer)]
+    
+    #edit num score
+    player[currentFrame].set(10-pins)
 
 
 def checkScore():

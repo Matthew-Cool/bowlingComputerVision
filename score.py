@@ -9,10 +9,11 @@ class Score:
         self.root.configure(bg='black')
         self.root.attributes('-fullscreen', True)
 
-        self.players = {str(i) : [tk.IntVar(), 
-                                  tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(), 
-                                  tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar()] 
-                                  for i in range(requestPlayers)}
+        self.players = {str(i) : [tk.IntVar(), #0
+            tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(), #1-10
+            tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(),tk.StringVar(), #11-20
+            False, False] #21-22 , oneDouble and twoDouble
+        for i in range(requestPlayers)}
 
         titleFrame = tk.Frame(self.root, bg='black')
         titleLabel = tk.Label(titleFrame, text="Tabletop Bowling Scoreboard", font=("Arial", 20), fg="blue", bg='black')
@@ -29,6 +30,8 @@ class Score:
 
         for i in range(requestPlayers):
             self.createFrames(scoreFrame, i)
+
+        #self.players['1'][0].set(300)
 
     def createTopFrameNums(self, r):
         for i in range(10):
@@ -51,6 +54,23 @@ class Score:
 
         for i in range(10):
             self.frame(playerFrame, playerNum, i+11, i+1)
+
+        totalFrame = tk.Frame(playerFrame, bg='white')
+        totalFrame.pack(side=tk.LEFT, padx=3)
+
+        totalOutLineFrame = tk.Frame(totalFrame, bg='black')
+        totalOutLineFrame.pack(pady=2, padx=2)
+
+        tk.Entry(totalOutLineFrame, 
+                width=10,
+                textvariable=self.players[str(playerNum)][0], 
+                state="disabled",
+                disabledbackground="black",
+                disabledforeground="white",
+                borderwidth=0,
+                highlightthickness=0,
+                justify="center",
+                font=tkF.Font(size=16)).pack(pady=10)
 
     def frame(self, root, playerNum, frameTextNum, frameNumNum):
         titleFrame = tk.Frame(root, bg='white')
