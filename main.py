@@ -3,6 +3,7 @@ import numpy as np
 import tkinter as tk
 import time
 
+import distSensor
 import score
 
 # python counterDebug.py 
@@ -17,6 +18,14 @@ currentFrame = 0
 currentThrow = 0
 
 system = score.Score(root, numOfPlayers) #open bowling scoreboard and keep track/edit through system var
+
+distSensor.setup()
+try:
+    distSensor.loop()
+except KeyboardInterrupt:
+    distSensor.destroy()
+
+
 
 tk.mainloop()
 
