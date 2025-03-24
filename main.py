@@ -22,6 +22,7 @@ tk.mainloop()
 
 
 def checkScore():
+    # COUNTING SYSTEM
     frameWidth = 1280
     frameHeight = 720
     camBrightness = 150
@@ -58,7 +59,8 @@ def checkScore():
             filterFalsePositives.append(c)
 
     pins = len(filterFalsePositives)
-    
+    #END OF COUNTING SYSTEM
+
     cap.release()
 
     return pins
