@@ -23,22 +23,22 @@ while True:
         break
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    lowerWhite = np.array([0,0,220])
-    upperWhite = np.array([180,20,255])
+    lowerWhite = np.array([0,0,253])
+    upperWhite = np.array([180,5,255])
 
     mask = cv2.inRange(hsv, lowerWhite, upperWhite)
 
     result = cv2.bitwise_and(frame, frame, mask=mask)
 
     greyResult = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY)
-    blurred = cv2.GaussianBlur(greyResult, (9, 9), 0)
+    blurred = cv2.GaussianBlur(greyResult, (1, 1), 0)
     _, thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     filterFalsePositives = []
     for c in contours:
         area = cv2.contourArea(c)
-        if 500 < area < 2000:
+        if 750 < area < 2500:
             filterFalsePositives.append(c)
 
     pins = len(filterFalsePositives)
