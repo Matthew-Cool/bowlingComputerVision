@@ -23,7 +23,7 @@ while True:
         break
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    lowerWhite = np.array([0,0,240])
+    lowerWhite = np.array([0,0,220])
     upperWhite = np.array([180,20,255])
 
     mask = cv2.inRange(hsv, lowerWhite, upperWhite)
@@ -38,7 +38,7 @@ while True:
     filterFalsePositives = []
     for c in contours:
         area = cv2.contourArea(c)
-        if 500 < area < 1500:
+        if 500 < area < 2000:
             filterFalsePositives.append(c)
 
     pins = len(filterFalsePositives)
@@ -50,8 +50,6 @@ while True:
     cv2.imshow('hsv View', hsv)
     cv2.imshow('mask View', mask)
     cv2.imshow('result View', result)
-
-
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

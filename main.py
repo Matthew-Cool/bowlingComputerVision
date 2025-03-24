@@ -10,6 +10,12 @@ import score
 
 root = tk.Tk()
 
-score.Score(root) #open bowling scoreboard
+numOfPlayers = 2 #make it an user input value in the future
+currentPlayer = 0
+currentFrame = 0
+
+system = score.Score(root, numOfPlayers) #open bowling scoreboard and keep track/edit through system var
+
+
 
 tk.mainloop()
