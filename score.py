@@ -192,7 +192,7 @@ class Score:
                     self.updatePlayerTotal(player, 10 - self.lastThrow)
                 else: #1st open, end game
                     player[intIndex].set(pins - self.lastThrow + total)
-                    player[textIndex].set(f'{player[textIndex].get()}   {10 - self.lastThrow}')
+                    player[textIndex].set(f'{player[textIndex].get()}   {pins - self.lastThrow}')
                     self.lastThrow = -2
                     self.checkForExtraBalls(player, pins - self.lastThrow)
                     self.nextPlayer()
@@ -312,7 +312,7 @@ class Score:
         filterFalsePositives = []
         for c in contours:
             area = cv2.contourArea(c)
-            if 500 < area < 2000:
+            if 500 < area < 2500:
                 filterFalsePositives.append(c)
 
         pins = 10 - len(filterFalsePositives)
