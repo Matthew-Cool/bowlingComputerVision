@@ -126,28 +126,28 @@ class Score:
                 if pins == 10: #strike
                     player[intIndex].set(10 + total)
                     player[textIndex].set('X')
-                    self.nextPlayer()
                     self.checkForExtraBalls(player, pins)
                     self.strikeBonus(player)
+                    self.nextPlayer()
                 else: #not strike
                     player[intIndex].set(pins + total)
                     self.lastThrow = pins
                     player[textIndex].set(str(pins))
-                    self.nextThrow()
                     self.checkForExtraBalls(player, pins)
+                    self.nextThrow()
                 self.updatePlayerTotal(player, pins)
             else:
                 if pins == 10: #spare
                     player[intIndex].set(10 - self.lastThrow + total)
                     player[textIndex].set(f'{player[textIndex].get()}   /')
-                    self.nextPlayer()
                     self.checkForExtraBalls(player, 10 - self.lastThrow)
                     self.spareBonus(player)
+                    self.nextPlayer()
                 else: #not spare
                     player[intIndex].set(pins - self.lastThrow + total)
                     player[textIndex].set(f'{player[textIndex].get()}   {pins-self.lastThrow}')
-                    self.nextPlayer()
                     self.checkForExtraBalls(player, pins - self.lastThrow)
+                    self.nextPlayer()
                 self.updatePlayerTotal(player, pins-self.lastThrow)
                 self.lastThrow = -1000 #temp thing to check if I'm making mistakes lol
         else: #tenth frame
@@ -156,37 +156,38 @@ class Score:
                     player[intIndex].set(10 + total)
                     player[textIndex].set('X')
                     self.lastThrow = 10
-                    self.nextThrow()
+                    self.updatePlayerTotal(player, pins)
                     self.checkForExtraBalls(player, pins)
+                    self.nextThrow()
                 else: #not first strike
                     player[intIndex].set(pins + total)
                     self.lastThrow = pins
                     player[textIndex].set(str(pins))
-                    self.nextThrow()
+                    self.updatePlayerTotal(player, pins)
                     self.checkForExtraBalls(player, pins)
-                self.updatePlayerTotal(player, pins)
+                    self.nextThrow()
             elif self.currentThrow == 1: 
                 if self.lastThrow == 10 and pins == 10: #2nd strike
                     player[intIndex].set(10 + total)
                     player[textIndex].set(f'{player[textIndex].get()}   X')
                     self.lastThrow = 10
                     self.updatePlayerTotal(player, 10)
-                    self.nextThrow()
                     self.checkForExtraBalls(player, pins)
+                    self.nextThrow()
                 elif self.lastThrow != 10 and pins == 10: #1st spare
                     player[intIndex].set(10 - self.lastThrow + total)
                     player[textIndex].set(f'{player[textIndex].get()}   /')
                     self.lastThrow = -1
                     self.updatePlayerTotal(player, 10 - self.lastThrow)
-                    self.nextThrow()
                     self.checkForExtraBalls(player, 10 - self.lastThrow)
+                    self.nextThrow()
                 else: #1st open, end game
                     player[intIndex].set(pins - self.lastThrow + total)
                     player[textIndex].set(f'{player[textIndex].get()}   {10 - self.lastThrow}')
                     self.lastThrow = -2
                     self.updatePlayerTotal(player, 10 - self.lastThrow)
-                    self.nextPlayer()
                     self.checkForExtraBalls(player, pins - self.lastThrow)
+                    self.nextPlayer()
             else: #last throw, end game no matter what
                 if self.lastThrow == 10 and pins == 10: #3rd strike
                     player[intIndex].set(10 + total)
@@ -211,6 +212,7 @@ class Score:
 
     def checkForExtraBalls(self, player, pins):
         if self.currentFrame != 0:
+            print(f'currentFrame={self.currentFrame}')
             if player[21] == True:
                 player[self.currentFrame].set(player[self.currentFrame].get() + pins)
                 self.updatePlayerTotal(player, pins)
@@ -219,7 +221,7 @@ class Score:
                 player[self.currentFrame].set(player[self.currentFrame].get() + pins)
                 self.updatePlayerTotal(player, pins)
                 if player[23] == True:
-                    player[self.currentFrame].set(player[self.currentFrame].get() + pins)  
+                    player[self.currentFrame-1].set(player[self.currentFrame-1].get() + pins)  
                     self.updatePlayerTotal(player, pins)
                     if pins != 10:
                         player[23] = False
