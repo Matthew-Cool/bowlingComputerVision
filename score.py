@@ -126,18 +126,22 @@ class Score:
                 if pins == 10: #strike
                     player[intIndex].set(10 + total)
                     player[textIndex].set('X')
+                    self.nextPlayer()
                 else: #not strike
                     player[intIndex].set(pins + total)
                     self.lastThrow = pins
                     player[textIndex].set(str(pins))
+                    self.nextThrow()
                 self.updatePlayerTotal(player, pins)
             else:
                 if pins == 10: #spare
                     player[intIndex].set(10 - self.lastThrow + total)
                     player[textIndex].set(f'{player[textIndex].get()}   /')
+                    self.nextPlayer()
                 else: #not spare
                     player[intIndex].set(pins - self.lastThrow + total)
                     player[textIndex].set(f'{player[textIndex].get()}   {pins-self.lastThrow}')
+                    self.nextPlayer()
                 self.updatePlayerTotal(player, pins-self.lastThrow)
                 self.lastThrow = -1000 #temp thing to check if I'm making mistakes lol
         else: #tenth frame
@@ -146,10 +150,12 @@ class Score:
                     player[intIndex].set(10 + total)
                     player[textIndex].set('X')
                     self.lastThrow = 10
+                    self.nextThrow()
                 else: #not first strike
                     player[intIndex].set(pins + total)
                     self.lastThrow = pins
                     player[textIndex].set(str(pins))
+                    self.nextThrow()
                 self.updatePlayerTotal(player, pins)
             elif self.currentThrow == 1: 
                 if self.lastThrow == 10 and pins == 10: #2nd strike
@@ -157,81 +163,70 @@ class Score:
                     player[textIndex].set(f'{player[textIndex].get()}   X')
                     self.lastThrow = 10
                     self.updatePlayerTotal(player, 10)
+                    self.nextThrow()
                 elif self.lastThrow != 10 and pins == 10: #1st spare
                     player[intIndex].set(10 - self.lastThrow + total)
                     player[textIndex].set(f'{player[textIndex].get()}   /')
                     self.lastThrow = -1
                     self.updatePlayerTotal(player, 10 - self.lastThrow)
+                    self.nextThrow()
                 else: #1st open, end game
                     player[intIndex].set(pins - self.lastThrow + total)
                     player[textIndex].set(f'{player[textIndex].get()}   {10 - self.lastThrow}')
                     self.lastThrow = -2
                     self.updatePlayerTotal(player, 10 - self.lastThrow)
+                    self.nextPlayer()
             else: #last throw, end game no matter what
                 if self.lastThrow == 10 and pins == 10: #3rd strike
                     player[intIndex].set(10 + total)
                     player[textIndex].set(f'{player[textIndex].get()}   X')
                     self.lastThrow = -3
                     self.updatePlayerTotal(player, 10)
+                    self.nextPlayer()
                 elif self.lastThrow != 10 and pins == 10:
                     player[intIndex].set(10 - self.lastThrow + total)
                     player[textIndex].set(f'{player[textIndex].get()}   /')
                     self.lastThrow = -4
                     self.updatePlayerTotal(player, 10 - self.lastThrow)
+                    self.nextPlayer()
                 else:
                     player[intIndex].set(pins - self.lastThrow + total)
                     player[textIndex].set(f'{player[textIndex].get()}   {10 - self.lastThrow}')
                     self.lastThrow = -5
                     self.updatePlayerTotal(player, 10 - self.lastThrow)
+                    self.nextPlayer()
 
-        self.updateValues()
+        print(f'currentPlayer={self.currentPlayer}\ncurrentFrame={self.currentFrame}\ncurrentThrow={self.currentThrow}')
 
-    #str((10-pins) - player[self.currentFrame+1].get())
+    def nextThrow(self):
+        if self.currentFrame <= 8: #we're on frames 1-9
+            if self.currentThrow >= 1:
+                self.currentThrow = 0
+            else:
+                self.currentThrow = 1
+        else: #we're in the 10th frame
+            if self.currentThrow >= 2:
+                self.currentThrow = 0
+            else:
+                self.currentThrow += 1
+
+    def nextFrame(self):
+        if self.currentFrame >= 10:
+            pass #end game somehow
+        else:
+            self.currentFrame += 1
+
+    def nextPlayer(self):
+        if self.currentPlayer >= self.numOfPlayers - 1:
+            self.currentPlayer = 0
+            self.currentThrow = 0
+            self.nextFrame()
+        else:
+            self.currentPlayer += 1
+            self.currentThrow = 0
 
     def updatePlayerTotal(self, player, addPins):
         player[0].set(player[0].get() + addPins)
-
-    def updateValues(self):
-        if self.currentFrame < 9:
-            if self.currentThrow == 0:
-                if self.players[str(self.currentPlayer)][self.currentFrame + 1].get() == 10:
-                    self.currentThrow = 0
-                    if self.currentPlayer >= self.numOfPlayers - 1:
-                        self.currentPlayer = 0
-                        self.currentFrame += 1
-                    else:
-                        self.currentPlayer += 1
-                else:
-                    self.currentThrow = 1
-            else:
-                self.currentThrow = 0
-                if self.currentPlayer >= self.numOfPlayers - 1:
-                    self.currentPlayer = 0
-                    self.currentFrame += 1
-                else:
-                    self.currentPlayer += 1
-        else:  # tenth frame
-            if self.currentThrow == 0:
-                if self.players[str(self.currentPlayer)][10].get() == 10:
-                    self.currentThrow = 1
-                else:
-                    self.currentThrow = 1
-            elif self.currentThrow == 1:
-                if self.players[str(self.currentPlayer)][10].get() == 10:
-                    self.currentThrow = 2
-                elif self.players[str(self.currentPlayer)][10].get() + self.players[str(self.currentPlayer)][9+1].get() == 10:
-                    self.currentThrow = 2
-                else:
-                    self.currentThrow = 2
-            else:
-                self.currentThrow = 0
-                if self.currentPlayer >= self.numOfPlayers - 1:
-                    self.currentPlayer = 0
-                    self.currentFrame += 1
-                else:
-                    self.currentPlayer += 1
-
-        print(f'currentPlayer={self.currentPlayer}\ncurrentFrame={self.currentFrame}\ncurrentThrow={self.currentThrow}')
 
     def checkScore(self):
         # COUNTING SYSTEM
