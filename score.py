@@ -150,8 +150,8 @@ class Score:
                     player[intIndex].set(10 - self.lastThrow + total)
                     player[textIndex].set(f'{player[textIndex].get()}   /')
                     self.checkForExtraBalls(player, 10 - self.lastThrow)
-                    self.spareBonus(player)
                     self.nextPlayer()
+                    self.spareBonus(player)
                 else: #not spare
                     player[intIndex].set(pins - self.lastThrow + total)
                     player[textIndex].set(f'{player[textIndex].get()}   {pins-self.lastThrow}')
@@ -217,16 +217,17 @@ class Score:
                     self.nextPlayer()
                     self.updatePlayerTotal(player, 10 - self.lastThrow)
 
-        print(f'currentPlayer={self.currentPlayer}\ncurrentFrame={self.currentFrame}\ncurrentThrow={self.currentThrow}')
+        #print(f'currentPlayer={self.currentPlayer}\ncurrentFrame={self.currentFrame}\ncurrentThrow={self.currentThrow}')
 
     def checkForExtraBalls(self, player, pins):
         if self.currentFrame != 0:
-            print(f'currentFrame={self.currentFrame}')
+            #print(f'currentFrame={self.currentFrame}, spareB={player[21]}')
             if player[21] == True:
                 player[self.currentFrame].set(player[self.currentFrame].get() + pins)
-                player[self.currentFrame+1].set(player[self.currentFrame].get() + pins)
+                player[self.currentFrame+1].set(player[self.currentFrame+1].get() + pins)
                 self.updatePlayerTotal(player, pins)
-                player[21] == False
+                player[21] = False
+                #print(f'**********bonus spare {player[21]}')
             elif player[22] == True:
                 if player[23] == True:
                     player[self.currentFrame].set(player[self.currentFrame].get() + pins*2)
@@ -237,13 +238,15 @@ class Score:
                         player[23] = False
                 else:
                     player[self.currentFrame].set(player[self.currentFrame].get() + pins)
-                    player[self.currentFrame-1].set(player[self.currentFrame-1].get() + pins)
-                    player[self.currentFrame+1].set(player[self.currentFrame].get() + pins)
+                    #player[self.currentFrame-1].set(player[self.currentFrame-1].get() + pins)
+                    player[self.currentFrame+1].set(player[self.currentFrame+1].get() + pins)
+                    self.updatePlayerTotal(player, pins)
                 if pins != 10 or self.currentFrame == 9:
                     player[22] = False
                     player[21] = True
                 
     def spareBonus(self, player):
+        #print("*****************************GIVE SPARE BONUS")
         player[21] = True #yes this is one line, I want to look somewhat nice, sorry
     
     def strikeBonus(self, player):
