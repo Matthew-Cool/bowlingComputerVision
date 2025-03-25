@@ -10,7 +10,7 @@ import score
 
 root = tk.Tk()
 
-numOfPlayers = 2 #make it an user input value in the future
+numOfPlayers = 1 #make it an user input value in the future
 
 currentPlayer = 0
 currentFrame = 0
