@@ -297,7 +297,7 @@ class Score:
             return
         
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        lowerWhite = np.array([0,0,250])
+        lowerWhite = np.array([0,0,230])
         upperWhite = np.array([180,5,255])
 
         mask = cv2.inRange(hsv, lowerWhite, upperWhite)
